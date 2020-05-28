@@ -1,32 +1,32 @@
 //var canvas = document.getElementById('maincanvas');
-var canvas = {
+const canvas = {
   0: document.getElementById("canvas1"),
   1: document.getElementById("canvas2"),
   2: document.getElementById("canvas0")
   };
-var flip = 0;
+let flip = 0;
 canvas[1-flip].style.visibility='hidden';
 canvas[flip].style.visibility='visible';
 canvas[2].style.visibility='visible';
 flip = 1 - flip;
 ctx = canvas[flip].getContext('2d');
-var srcs = [
+const srcs = [
   ['back.png',0,0],
   ['mito.png',40,240],
   ['obs.png',400,280]
 ];
 
-var images = [];
-for (var i in srcs){
+let images = [];
+for (let i in srcs){
   images[i] = new Image();
   images[i].src = srcs[i][0];
 }
 
-var loadedCount = 1;
-for (var i in images){
+let loadedCount = 1;
+for (let i in images){
   images[i].addEventListener('load',function(){
     if (loadedCount == images.length){
-      for(var j in images){
+      for(let j in images){
         ctx.drawImage(images[j],srcs[j][1],srcs[j][2]);
         console.log('a');
       }
@@ -37,8 +37,8 @@ for (var i in images){
 }
 
 //クリックでジャンプする
-var point = 0;
-var jumpAble = true;
+let point = 0;
+let jumpAble = true;
 canvas[2].addEventListener('click',e =>{
   //マウスの座標をカンバスないの座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
@@ -51,11 +51,11 @@ canvas[2].addEventListener('click',e =>{
   console.log('c');
 })
 
-var x = 40;
-var y = 240;
-var n = 0;
-var obs = 400;
-var jumphight = [-5,-5,-5,-4,-3,-3,-2,-2,-1,0,0,0,1,1,1,2,2,2,3,3,3,4,4,4]
+let x = 40;
+let y = 240;
+let n = 0;
+let obs = 400;
+const jumphight = [-5,-5,-5,-4,-3,-3,-2,-2,-1,0,0,0,1,1,1,2,2,2,3,3,3,4,4,4]
 function move(){//毎1/10秒の更新
   canvas[1-flip].style.visibility='hidden';
   canvas[flip].style.visibility='visible';
@@ -87,11 +87,11 @@ function obstacle(){
   if (obs == 400){
     ctx.drawImage(images[2],obs,280);
     obs = obs -10;
-  }else if(obs == -20){
+  }else if(obs <= -15){
     obs = 400;
   }else{
     ctx.drawImage(images[2],obs,280);
-    obs = obs - 10;
+    obs = obs - 7;
   }
 
 }
