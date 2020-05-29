@@ -101,7 +101,7 @@ function hitcheck(){
 }
 function gameover(){
   ctx.drawImage(images[3],100,100);//描写されない
-  clearInterval(moveing);
+  clearInterval(moveing);//こいつのせいで↑
 }
 
 let moveing = setInterval(move,1000/30);
