@@ -1,3 +1,4 @@
+'use strict';
 //var canvas = document.getElementById('maincanvas');
 const canvas = {
   0: document.getElementById("canvas1"),
@@ -9,11 +10,12 @@ canvas[1-flip].style.visibility='hidden';
 canvas[flip].style.visibility='visible';
 canvas[2].style.visibility='visible';
 flip = 1 - flip;
-ctx = canvas[flip].getContext('2d');
+let ctx = canvas[flip].getContext('2d');
 const srcs = [
   ['back.png',0,0],
   ['mito.png',40,240],
-  ['obs.png',400,280]
+  ['obs.png',400,280],
+  ['gameover.png',200,100]
 ];
 
 let images = [];
@@ -61,7 +63,7 @@ function move(){//毎1/10秒の更新
   canvas[flip].style.visibility='visible';
   flip = 1 - flip;
   ctx = canvas[flip].getContext('2d');
-    
+
   if (jumpAble == false){//10コマ上がって12コマ下がる
     if ( n == 24 ){
       n = 0;
@@ -71,15 +73,11 @@ function move(){//毎1/10秒の更新
     n++;
     }
   }
-  else{
-  console.log('b');
-  }
   ctx.clearRect(0, 0, 400, 400);
   ctx.drawImage(images[0],0,0);
   ctx.drawImage(images[1],x,y);
-  if (1 == 1){
-    obstacle();
-  }
+  obstacle();
+  hitcheck();
 }
 
 //障害物の表示、動き
@@ -93,9 +91,20 @@ function obstacle(){
     ctx.drawImage(images[2],obs,280);
     obs = obs - 7;
   }
-
 }
-setInterval(move,1000/30);
+//当たり判定
+function hitcheck(){
+  if (obs <= 82 && obs >= 20 && y >= 225){
+    gameover();
+    console.log('hit');
+  }
+}
+function gameover(){
+  ctx.drawImage(images[3],100,100);//描写されない
+  clearInterval(moveing);
+}
+
+let moveing = setInterval(move,1000/30);
 
 /*ジャンプし続ける
 var x = 40;
