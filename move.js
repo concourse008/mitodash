@@ -16,7 +16,8 @@ const srcs = [
   ['back.png',0,0],
   ['mito.png',40,240],
   ['obs.png',400,280],
-  ['gameover.png',200,100]
+  ['gameover.png',200,100],
+  ['op.png',0,0]
 ];
 
 let images = [];
@@ -31,6 +32,7 @@ for (let i in images){
     if (loadedCount == images.length){
       for(let j in images){
         ctx.drawImage(images[j],srcs[j][1],srcs[j][2]);
+        ctx0.drawImage(images[4],0,0);
         console.log('a');
       }
     }
@@ -52,6 +54,12 @@ canvas[2].addEventListener('click',e =>{
   //クリック判定処理
   jumpAble = false;
   console.log('c');
+  hiscore = hiscore +10;
+  //停止中、クリックでスタート
+  if (stop == true){
+    stop = false;
+    restart();
+  }
 })
 
 let x = 40;
@@ -59,6 +67,7 @@ let y = 240;
 let n = 0;
 let obs = [400,400,400];
 let lastgo = 0;
+let stop = true;
 const jumphight = [-5,-5,-5,-4,-3,-3,-2,-2,-1,0,0,0,1,1,1,2,2,2,3,3,3,4,4,4]
 function move(){//毎1/10秒の更新
   canvas[1-flip].style.visibility='hidden';
@@ -78,15 +87,24 @@ function move(){//毎1/10秒の更新
   ctx.clearRect(0, 0, 400, 400);
   ctx.drawImage(images[0],0,0);
   ctx.drawImage(images[1],x,y);
+  score();
+  hiscore++;
   obstacle();
   hitcheck();
+}
+//スコアの表示
+let hiscore = 0;
+function score() {
+  ctx.font = "18px serif";
+  let i = Math.floor(hiscore / 10);
+  ctx.fillText("score:" + i , 300, 30);
 }
 
 //障害物の表示、動き
 function obstacle(){
   for (let i in obs){
     if (obs[i] == 400){
-      if (Math.floor(Math.random()*10) === 0 && lastgo >= 40){
+      if (Math.floor(Math.random()*30) === 0 && lastgo >= 40){
         ctx.drawImage(images[2],obs[i],280);
         obs[i] = obs[i] -10;
         console.log('go');
@@ -114,9 +132,23 @@ function hitcheck(){
 function gameover(){
   ctx0.drawImage(images[3],100,100);
   clearInterval(moveing);
+  stop = true;
 }
 
-const moveing = setInterval(move,1000/30);
+let moveing = 0;
+function restart(){
+  ctx0.clearRect(0, 0, 400, 400);
+  y = 240;
+  n = 0;
+  obs = [400,400,400];
+  lastgo = 0;
+  jumpAble = true;
+  hiscore = 0;
+  function moveng(){
+    moveing = setInterval(move,1000/30);
+  }
+  moveng();
+}
 
 /*ジャンプし続ける
 var x = 40;
