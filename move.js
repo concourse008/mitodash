@@ -11,6 +11,7 @@ canvas[flip].style.visibility='visible';
 canvas[2].style.visibility='visible';
 flip = 1 - flip;
 let ctx = canvas[flip].getContext('2d');
+let ctx0 = canvas[2].getContext('2d');
 const srcs = [
   ['back.png',0,0],
   ['mito.png',40,240],
@@ -100,8 +101,8 @@ function hitcheck(){
   }
 }
 function gameover(){
-  ctx.drawImage(images[3],100,100);//描写されない
-  clearInterval(moveing);//こいつのせいで↑
+  ctx0.drawImage(images[3],100,100);//描写されない
+  clearInterval(moveing);
 }
 
 let moveing = setInterval(move,1000/30);
