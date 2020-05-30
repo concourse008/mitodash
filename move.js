@@ -150,6 +150,7 @@ function gameover(){
 
 let moveing = 0;
 function restart(){
+  totalscore = Number(localStorage.getItem('score'));
   ctx0.clearRect(0, 0, 400, 400);
   ctx0.font = "18px serif";
   ctx0.fillText("high score:" + Math.floor(totalscore / 10) , 50, 30);
