@@ -206,7 +206,7 @@ function tweet(){
   const hrefValue = 'https://twitter.com/intent/tweet?button_hashtag=' + encodeURIComponent('カエデログ') + '&ref_src=twsrc%5Etfw';
   anchor.setAttribute('herf',hrefValue);
   anchor.className = 'twitter-hashtag-button';
-  anchor.setAttribute('data-text','ミトとカエデは'+way+'メートルを走り抜けました！　'+coment+'　#ミトダッシュ');
+  anchor.setAttribute('data-text','ミトとカエデは'+way+'メートルを走り抜けました！'+coment+'　#ミトダッシュ');
   anchor.setAttribute('data-size',"large");
   anchor.setAttribute('data-url',"https://concourse008.github.io/mitodash/index.html");
   anchor.innerText = 'Tweet #カエデログ';
