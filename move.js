@@ -191,7 +191,9 @@ function tweet(){
   }
   let way = Math.floor(hiscore / 10);
   let coment = 0;
-  if (hiscore >= 3000){
+  if (hiscore >= 10000){
+    coment = '「やっぱりミトちゃんはさいきょうや……」'
+  }else if (hiscore >= 3000){
     coment = '「ミトちゃんかぜになってたわ」';
   }else if(hiscore >= 2000){
     coment = '「ミトちゃんはすごいなぁ」';
