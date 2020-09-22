@@ -127,7 +127,7 @@ function step(){
   }
   ctx.font = "18px sans-serif";
   let i = Math.floor(hiscore / 10);
-  ctx.fillText("score:" + hiscore, 250, 30);//スコア
+  ctx.fillText("score:" + hiscore, 50, 55);//スコア
 
   
   canvas[1 - flip].style.visibility = 'hidden';
