@@ -67,6 +67,9 @@ let lastgo = 0;
 let stop = true;
 const jumphight = [-5, -5, -5, -4, -3, -3, -2, -2, -1, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4]
 function move() {//毎1/10秒の更新
+
+  ctx = canvas[flip].getContext('2d');
+
   if (jumpAble == false) {//10コマ上がって12コマ下がる
     if (n == 24) {
       n = 0;
@@ -76,14 +79,27 @@ function move() {//毎1/10秒の更新
       n++;
     }
   }
+  ctx.clearRect(0, 0, 400, 400);
+  ctx.drawImage(images[0], 0, 0);
+  if (jumpAble == false) {
+    ctx.drawImage(images[5], x, y);
+  } else {
+    ctx.drawImage(images[1], x, y);
+  }
   score();
   hiscore++;
   obstacle();
   hitcheck();
+  canvas[1 - flip].style.visibility = 'hidden';
+  canvas[flip].style.visibility = 'visible';
+  flip = 1 - flip;
 }
 //スコアの表示
 let hiscore = 0;
 function score() {
+  ctx.font = "18px sans-serif";
+  let i = Math.floor(hiscore / 10);
+  ctx.fillText("score:" + i, 250, 30);
 }
 
 //障害物の表示、動き
@@ -93,6 +109,7 @@ function obstacle() {
   for (let i in obs) {
     if (obs[i] == 400) {
       if (Math.floor(Math.random() * 30) === 0 && lastgo >= 45) {
+        ctx.drawImage(images[2], obs[i], 275);
         obs[i] = obs[i] - 10;
         lastgo = 0;
       }
@@ -100,6 +117,7 @@ function obstacle() {
     } else if (obs[i] <= -15) {
       obs[i] = 400;
     } else {
+      ctx.drawImage(images[2], obs[i], 275);
       if (hiscore % 300 == 0) {
         randam = Math.floor(Math.random() * 4);
       }
@@ -107,40 +125,10 @@ function obstacle() {
     }
   }
 }
-
-
-//画面の描写全部
-function step(){
-  window.requestAnimationFrame(step);
-
-  ctx = canvas[flip].getContext('2d');
-  ctx.clearRect(0,0,400,400);
-//  ctx0.clearRect(0,0,400,400);
-  ctx.drawImage(images[0], 0, 0);//背景
-  if (jumpAble == false) {
-    ctx.drawImage(images[5], x, y);//ジャンプミト
-  } else {
-    ctx.drawImage(images[1], x, y);//地面ミト
-  }
-  for(let i = 0; i < 3; i++){
-    ctx.drawImage(images[2], obs[i], 260);//障害物
-  }
-  ctx.font = "18px sans-serif";
-  let i = Math.floor(hiscore / 10);
-  ctx.fillText("score:" + i, 250, 30);//スコア
-
-  
-  canvas[1 - flip].style.visibility = 'hidden';
-  canvas[flip].style.visibility = 'visible';
-  flip = 1 - flip;
-}
-
-
-
 //当たり判定
 function hitcheck() {
   for (let i in obs) {
-    if (obs[i] <= 85 && obs[i] >= 45 && y >= 205) {
+    if (obs[i] <= 82 && obs[i] >= 35 && y >= 205) {
       gameover();
     }
   }
@@ -148,19 +136,17 @@ function hitcheck() {
 function gameover() {
   ctx0.font = "18px sans-serif";
   ctx0.drawImage(images[3], 100, 100);
-  ctx0.fillText("今回のスコア：" + hiscore, 152, 338)
+  ctx0.fillText("今回のスコア：" + hiscore, 160, 335)
   clearInterval(moveing);
   stop = true;
   //ハイスコア記録
   if (totalscore <= hiscore) {
     localStorage.score = hiscore;
-    totalscore = hiscore;
   }
   tweet();
   form();
 }
 
-//リスタート処理
 let moveing = 0;
 function restart() {
   totalscore = Number(localStorage.getItem('score'));
@@ -179,7 +165,6 @@ function restart() {
     moveing = setInterval(move, 1000 / 30);
   }
   moveng();
-  step();
 }
 
 //ハイスコア
@@ -257,35 +242,23 @@ const xhr = new XMLHttpRequest();
 const postbutton = function () {
   let name = document.getElementById('name');
   let allDatas = "name=" + name.value + "&score=" + hiscore;
-//  var data=new FormData();
-//  data.append("value", allDatas);
-  xhr.open("POST", 'https://young-hollows-52834.herokuapp.com/', true);//ここの二つ目が送信先
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
-  console.log(xhr);
+  xhr.open("POST", 'http://localhost:8000/', false);//ここの二つ目が送信先
+  xhr.setRequestHeader('Context-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
   xhr.send(allDatas);
-  PostDivided.innerHTML = '<p> 送信完了！</p>';
 }
 xhr.onreadystatechange = function () {
   if (xhr.readyState === 4 && xhr.status === 200) {
     let hoge = name.value || '名無し';
-    console.log("ok");
+    console.log("ok name=" + hoge + "&hiscore=" + hiscore);
     //エラーを出さなかった時の処理
   } else {
     let hoge = name.value || '名無し';
-    console.log("err");
+    console.log("err name=" + hoge + "&hiscore=" + hiscore);
   }
 }
-function EncodeHTMLForm( data )
-{
-    var params = [];
 
-    for( var name in data )
-    {
-        var value = data[ name ];
-        var param = encodeURIComponent( name ) + '=' + encodeURIComponent( value );
-
-        params.push( param );
-    }
-
-    return params.join( '&' ).replace( /%20/g, '+' );
+//画面の描写全部
+function step(){
+  window.requestAnimationFrame(step);
+  
 }
