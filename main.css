@@ -35,8 +35,6 @@ canvas {
 }
 
 
-
-
 table{
   width: 100%;
   border-collapse: collapse;
@@ -75,7 +73,7 @@ table th:after{
 
 table td{
   text-align: left;
-  width: 70%;
+  width: 30%;
   text-align: center;
   background-color: #eee;
   padding: 10px 0;
