@@ -127,7 +127,7 @@ function step(){
   }
   ctx.font = "18px sans-serif";
   let i = Math.floor(hiscore / 10);
-  ctx.fillText("score:" + i, 250, 30);//スコア
+  ctx.fillText("score:" + hiscore, 250, 30);//スコア
 
   
   canvas[1 - flip].style.visibility = 'hidden';
@@ -166,7 +166,7 @@ function restart() {
   totalscore = Number(localStorage.getItem('score'));
   ctx0.clearRect(0, 0, 400, 400);
   ctx0.font = "18px sans-serif";
-  ctx0.fillText("high score:" + Math.floor(totalscore / 10), 50, 30);
+  ctx0.fillText("high score:" + totalscore, 50, 30);
   y = 220;
   n = 0;
   obs = [400, 400, 400];
@@ -205,16 +205,20 @@ function tweet() {
   while (tweetDivided.firstChild) {
     tweetDivided.removeChild(tweetDivided.firstChild);
   }
-  let way = Math.floor(hiscore / 10);
+  let way = hiscore / 10;
   let coment = 0;
-  if (hiscore >= 3000) {
+  if (hiscore >= 5000) {
+    coment = '「ミトちゃんしっぷうになってたわ」';
+  } else if (hiscore >= 4000) {
+    coment = '「ミトちゃんはほんまにすごいなぁ」';
+  } else if (hiscore >= 3000) {
     coment = '「ミトちゃんかぜになってたわ」';
   } else if (hiscore >= 2000) {
     coment = '「ミトちゃんはすごいなぁ」';
   } else if (hiscore >= 1000) {
     coment = '「ええきもちや」';
   } else if (hiscore >= 500) {
-    coment = '「なんやこのしかくいうんち」';
+    coment = '「なんやこのじゃまなん」';
   } else {
     coment = '「ミトちゃんあっちになんかある！」';
   }
