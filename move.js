@@ -264,7 +264,8 @@ function form() {
 const xhr = new XMLHttpRequest();
 const postbutton = function () {
   let name = document.getElementById('name');
-  let allDatas = "name=" + name.value + "&score=" + hiscore;
+  let hoge = name.value || '名無し';
+  let allDatas = "name=" + hoge + "&score=" + hiscore;
   //  var data=new FormData();
   //  data.append("value", allDatas);
   xhr.open("POST", 'https://young-hollows-52834.herokuapp.com/', true);//ここの二つ目が送信先
@@ -275,7 +276,6 @@ const postbutton = function () {
 }
 xhr.onreadystatechange = function () {
   if (xhr.readyState === 4 && xhr.status === 200) {
-    let hoge = name.value || '名無し';
     console.log("ok");
     //エラーを出さなかった時の処理
   } else {
