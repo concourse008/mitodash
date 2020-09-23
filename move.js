@@ -87,12 +87,14 @@ function score() {
 }
 
 //障害物の表示、動き
-let speed = [6, 7, 8, 9];
+//let speed = [6, 7, 8, 9];
+let speed = 7;
 let randam = 0;
+let span = 45; //障害物の間隔
 function obstacle() {
   for (let i in obs) {
     if (obs[i] == 400) {
-      if (Math.floor(Math.random() * 30) === 0 && lastgo >= 45) {
+      if (Math.floor(Math.random() * 30) === 0 && lastgo >= span) {
         obs[i] = obs[i] - 10;
         lastgo = 0;
       }
@@ -101,35 +103,36 @@ function obstacle() {
       obs[i] = 400;
     } else {
       if (hiscore % 300 == 0) {
-        randam = Math.floor(Math.random() * 4);
+        speed = speed + 1;
+        //      randam = Math.floor(Math.random() * 4);
       }
-      obs[i] = obs[i] - speed[randam];//障害物のスピード
+      obs[i] = obs[i] - speed;//障害物のスピード[randam]
     }
   }
 }
 
 
 //画面の描写全部
-function step(){
+function step() {
   window.requestAnimationFrame(step);
 
   ctx = canvas[flip].getContext('2d');
-  ctx.clearRect(0,0,400,400);
-//  ctx0.clearRect(0,0,400,400);
+  ctx.clearRect(0, 0, 400, 400);
+  //  ctx0.clearRect(0,0,400,400);
   ctx.drawImage(images[0], 0, 0);//背景
   if (jumpAble == false) {
     ctx.drawImage(images[5], x, y);//ジャンプミト
   } else {
     ctx.drawImage(images[1], x, y);//地面ミト
   }
-  for(let i = 0; i < 3; i++){
+  for (let i = 0; i < 3; i++) {
     ctx.drawImage(images[2], obs[i], 260);//障害物
   }
   ctx.font = "18px sans-serif";
   let i = Math.floor(hiscore / 10);
   ctx.fillText("score:" + hiscore, 50, 55);//スコア
 
-  
+
   canvas[1 - flip].style.visibility = 'hidden';
   canvas[flip].style.visibility = 'visible';
   flip = 1 - flip;
@@ -173,6 +176,7 @@ function restart() {
   lastgo = 0;
   jumpAble = true;
   hiscore = 0;
+  speed = 7;
   tweetDivided.innerHTML = '';
   PostDivided.innerHTML = '';
   function moveng() {
@@ -261,8 +265,8 @@ const xhr = new XMLHttpRequest();
 const postbutton = function () {
   let name = document.getElementById('name');
   let allDatas = "name=" + name.value + "&score=" + hiscore;
-//  var data=new FormData();
-//  data.append("value", allDatas);
+  //  var data=new FormData();
+  //  data.append("value", allDatas);
   xhr.open("POST", 'https://young-hollows-52834.herokuapp.com/', true);//ここの二つ目が送信先
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
   console.log(xhr);
@@ -279,17 +283,15 @@ xhr.onreadystatechange = function () {
     console.log("err");
   }
 }
-function EncodeHTMLForm( data )
-{
-    var params = [];
+function EncodeHTMLForm(data) {
+  var params = [];
 
-    for( var name in data )
-    {
-        var value = data[ name ];
-        var param = encodeURIComponent( name ) + '=' + encodeURIComponent( value );
+  for (var name in data) {
+    var value = data[name];
+    var param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
 
-        params.push( param );
-    }
+    params.push(param);
+  }
 
-    return params.join( '&' ).replace( /%20/g, '+' );
+  return params.join('&').replace(/%20/g, '+');
 }
